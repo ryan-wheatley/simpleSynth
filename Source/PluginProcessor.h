@@ -5,8 +5,7 @@
 #include "SynthVoice.h"
 
 //==============================================================================
-/**
-*/
+
 class SimpleSynthAudioProcessor  : public AudioProcessor
 {
 public:
@@ -60,8 +59,6 @@ public:
     float squareDecayTime;
     float squareSustainTime;
     float squareReleaseTime;
-
-   
 
     AudioProcessorValueTreeState tree;
 

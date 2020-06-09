@@ -4,8 +4,6 @@
 SimpleSynthAudioProcessorEditor::SimpleSynthAudioProcessorEditor (SimpleSynthAudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
     setSize (800, 600);
 
     triangleAttackSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
@@ -203,9 +201,7 @@ void SimpleSynthAudioProcessorEditor::paint (Graphics& g)
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (Colours::black);
 
-
     g.setColour(Colours::whitesmoke);
-
     g.fillRoundedRectangle(10, 50, 245, 270, 1.5);
     g.fillRoundedRectangle(265, 50, 330, 270, 1.5);
     g.fillRoundedRectangle(10, 330, 245, 140, 1.5);
@@ -216,14 +212,13 @@ void SimpleSynthAudioProcessorEditor::paint (Graphics& g)
     g.setFont(Font("Times New Roman", 20.0f, Font::italic));
     g.drawText("Mine Is Yours", 500, 5, 200, 40, Justification::centred, true);
 
-    g.setFont(Font("Arial", 16.0f, Font::bold));
     g.setColour(Colours::black);
+    g.setFont(Font("Arial", 16.0f, Font::bold));
     g.drawText("LEVEL", 85, 60, 80, 20, Justification::centred, true);
     g.drawText("THICKEN", 165, 60, 80, 20, Justification::centred, true);
     g.drawText("DEPTH", 85, 440, 80, 20, Justification::centred, true);
     g.drawText("SPEED", 165, 440, 80, 20, Justification::centred, true);
     g.drawText("RELEASE FILTER SWEEP", 10, 340, 200, 20, Justification::centred, true);
-
 
     g.setColour(Colours::darkgrey);
     g.drawText("(SUPER)", 165, 230, 80, 20, Justification::centred, true);
@@ -234,11 +229,6 @@ void SimpleSynthAudioProcessorEditor::paint (Graphics& g)
     g.drawText("S", 460, 60, 20, 20, Justification::centred, true);
     g.drawText("R", 540, 60, 20, 20, Justification::centred, true);
 
-    
-
-   
-
-    
     g.drawLine(20, 120, 40, 100, 3);
     g.drawLine(40, 100, 60, 120, 3);
     g.drawLine(60, 120, 80, 100, 3);
@@ -274,6 +264,5 @@ void SimpleSynthAudioProcessorEditor::resized()
 
 void SimpleSynthAudioProcessorEditor::sliderValueChanged(Slider* slider)
 {
-
-    
+ 
 }
