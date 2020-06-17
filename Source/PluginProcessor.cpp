@@ -34,8 +34,20 @@ SimpleSynthAudioProcessor::SimpleSynthAudioProcessor()
         std::make_unique<AudioParameterFloat>("sawSustain","sawSustain", 0.1f, 1.0f,0.5f),
         std::make_unique<AudioParameterFloat>("sawRelease","sawRelease", 0.1f, 4000.0f,2000.0f),
 
-        std::make_unique<AudioParameterFloat>("releaseDepth","releaseDepth", 0.1f, 10000.0f,2000.0f),
-        std::make_unique<AudioParameterFloat>("releaseSpeed","releaseSpeed", 0.1f, 4000.0f,2000.0f)
+        std::make_unique<AudioParameterFloat>("releaseDepth","releaseDepth", 0.0f, 8000.0f,2000.0f),
+        std::make_unique<AudioParameterFloat>("releaseSpeed","releaseSpeed", 0.1f, 4000.0f,2000.0f),
+
+        std::make_unique<AudioParameterInt>("globalCutoff","globalCutoff", 40.0f, 8000.0f,7000.0f),
+        std::make_unique<AudioParameterFloat>("globalResonance","globalResonance", 0.0f,10.0f,0.0f),
+
+        std::make_unique<AudioParameterFloat>("gateDepth","gateDepth", 0.0f, 1.0f, 0.0f),
+        std::make_unique<AudioParameterFloat>("gateSpeed","gateSpeed", 0.0f,10.0f,4.0f),
+
+        std::make_unique<AudioParameterFloat>("volume","volume", 0.0f,1.0f,0.5f),
+
+        std::make_unique<AudioParameterFloat>("trianglePan","trianglePan", -0.5f,0.5f,0.0f),
+        std::make_unique<AudioParameterFloat>("squarePan","squarePan", -0.5f,0.5f,0.0f),
+        std::make_unique<AudioParameterFloat>("sawPan","sawPan", -0.5f,0.5f,0.0f)
 
         } )
 #endif
@@ -96,8 +108,7 @@ double SimpleSynthAudioProcessor::getTailLengthSeconds() const
 
 int SimpleSynthAudioProcessor::getNumPrograms()
 {
-    return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
-                // so this should be at least 1, even if you're not really implementing programs.
+    return 1;   
 }
 
 int SimpleSynthAudioProcessor::getCurrentProgram()
@@ -128,8 +139,7 @@ void SimpleSynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 
 void SimpleSynthAudioProcessor::releaseResources()
 {
-    // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
+    
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -181,16 +191,30 @@ void SimpleSynthAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
             float* newFloatPtr19 = (float*)tree.getRawParameterValue("releaseDepth");
             float* newFloatPtr20 = (float*)tree.getRawParameterValue("releaseSpeed");
 
+            float* newFloatPtr21 = (float*)tree.getRawParameterValue("globalCutoff");
+            float* newFloatPtr22 = (float*)tree.getRawParameterValue("globalResonance");
+
+            float* newFloatPtr23 = (float*)tree.getRawParameterValue("gateDepth");
+            float* newFloatPtr24 = (float*)tree.getRawParameterValue("gateSpeed");
+
+            float* newFloatPtr25 = (float*)tree.getRawParameterValue("volume");
+
+            float* newFloatPtr26 = (float*)tree.getRawParameterValue("trianglePan");
+            float* newFloatPtr27 = (float*)tree.getRawParameterValue("squarePan");
+            float* newFloatPtr28 = (float*)tree.getRawParameterValue("sawPan");
+
             myVoice->getParam(newFloatPtr, newFloatPtr2, newFloatPtr3,newFloatPtr4, newFloatPtr5, newFloatPtr6,
             newFloatPtr7, newFloatPtr8, newFloatPtr9, newFloatPtr10, newFloatPtr11, newFloatPtr12,
-            newFloatPtr13, newFloatPtr14, newFloatPtr15, newFloatPtr16, newFloatPtr17, newFloatPtr18, newFloatPtr19, newFloatPtr20);
+            newFloatPtr13, newFloatPtr14, newFloatPtr15, newFloatPtr16, newFloatPtr17, newFloatPtr18, newFloatPtr19, newFloatPtr20, 
+            newFloatPtr21, newFloatPtr22,
+            newFloatPtr23, newFloatPtr24,
+            newFloatPtr25, newFloatPtr26, newFloatPtr27, newFloatPtr28);
         }
     }
 
     buffer.clear();
 
-    mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-    
+    mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples()); 
 }
 
 //==============================================================================
@@ -207,19 +231,15 @@ AudioProcessorEditor* SimpleSynthAudioProcessor::createEditor()
 //==============================================================================
 void SimpleSynthAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    
 }
 
 void SimpleSynthAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    
 }
 
-//==============================================================================
-// This creates new instances of the plugin..
+
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new SimpleSynthAudioProcessor();

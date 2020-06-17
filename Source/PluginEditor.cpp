@@ -4,15 +4,27 @@
 SimpleSynthAudioProcessorEditor::SimpleSynthAudioProcessorEditor (SimpleSynthAudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p)
 {
-    setSize (800, 600);
+    setSize (692, 478);
 
-    triangleAttackSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    triangleAttackSlider.setRange(0.1f, 4000.0f);
-    triangleAttackSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
-    triangleAttackSlider.setValue(2000);
-    triangleAttackSlider.addListener(this);
-    triangleAttackSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
-    addAndMakeVisible(&triangleAttackSlider);
+    initialiseAttackOrReleaseSlider(triangleAttackSlider);
+    initialiseAttackOrReleaseSlider(squareAttackSlider);
+    initialiseAttackOrReleaseSlider(sawAttackSlider);
+
+    initialiseAttackOrReleaseSlider(triangleReleaseSlider);
+    initialiseAttackOrReleaseSlider(squareReleaseSlider);
+    initialiseAttackOrReleaseSlider(sawReleaseSlider);
+
+    initialiseSustainSlider(triangleSustainSlider);
+    initialiseSustainSlider(squareSustainSlider);
+    initialiseSustainSlider(sawSustainSlider);
+
+    initialisePanSlider(trianglePanSlider);
+    initialisePanSlider(squarePanSlider);
+    initialisePanSlider(sawPanSlider);
+
+    initialiseLevelSliders(triangleLevelSlider);
+    initialiseLevelSliders(squareLevelSlider);
+    initialiseLevelSliders(sawLevelSlider);
 
     triangleDecaySlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     triangleDecaySlider.setRange(0.1f, 1000.0f);
@@ -22,30 +34,6 @@ SimpleSynthAudioProcessorEditor::SimpleSynthAudioProcessorEditor (SimpleSynthAud
     triangleDecaySlider.setPopupDisplayEnabled(true, true, nullptr, -1);
     addAndMakeVisible(&triangleDecaySlider);
 
-    triangleSustainSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    triangleSustainSlider.setRange(0.1f, 1.0f);
-    triangleSustainSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
-    triangleSustainSlider.setValue(0.5f);
-    triangleSustainSlider.addListener(this);
-    triangleSustainSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
-    addAndMakeVisible(&triangleSustainSlider);
-
-    triangleReleaseSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    triangleReleaseSlider.setRange(0.1f, 4000.0f);
-    triangleReleaseSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
-    triangleReleaseSlider.setValue(2000.0f);
-    triangleReleaseSlider.addListener(this);
-    triangleReleaseSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
-    addAndMakeVisible(&triangleReleaseSlider);
-
-    triangleLevelSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    triangleLevelSlider.setRange(0.0f, 1.0f);
-    triangleLevelSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
-    triangleLevelSlider.setValue(0.0f);
-    triangleLevelSlider.addListener(this);
-    triangleLevelSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
-    addAndMakeVisible(&triangleLevelSlider);
-
     triangleThickenSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     triangleThickenSlider.setRange(0.0f, 1.0f);
     triangleThickenSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
@@ -53,14 +41,6 @@ SimpleSynthAudioProcessorEditor::SimpleSynthAudioProcessorEditor (SimpleSynthAud
     triangleThickenSlider.addListener(this);
     triangleThickenSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
     addAndMakeVisible(&triangleThickenSlider);
-
-    squareAttackSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    squareAttackSlider.setRange(0.1f, 4000.0f);
-    squareAttackSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
-    squareAttackSlider.setValue(2000);
-    squareAttackSlider.addListener(this);
-    squareAttackSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
-    addAndMakeVisible(&squareAttackSlider);
 
     squareDecaySlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     squareDecaySlider.setRange(0.1f, 1000.0f);
@@ -70,30 +50,6 @@ SimpleSynthAudioProcessorEditor::SimpleSynthAudioProcessorEditor (SimpleSynthAud
     squareDecaySlider.setPopupDisplayEnabled(true, true, nullptr, -1);
     addAndMakeVisible(&squareDecaySlider);
 
-    squareSustainSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    squareSustainSlider.setRange(0.1f, 1.0f);
-    squareSustainSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
-    squareSustainSlider.setValue(0.5f);
-    squareSustainSlider.addListener(this);
-    squareSustainSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
-    addAndMakeVisible(&squareSustainSlider);
-
-    squareReleaseSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    squareReleaseSlider.setRange(0.1f, 4000.0f);
-    squareReleaseSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
-    squareReleaseSlider.setValue(2000.0f);
-    squareReleaseSlider.addListener(this);
-    squareReleaseSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
-    addAndMakeVisible(&squareReleaseSlider);
-
-    squareLevelSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    squareLevelSlider.setRange(0.0f, 1.0f);
-    squareLevelSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
-    squareLevelSlider.setValue(0.0f);
-    squareLevelSlider.addListener(this);
-    squareLevelSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
-    addAndMakeVisible(&squareLevelSlider);
-
     squareThickenSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     squareThickenSlider.setRange(0.0f, 1.0f);
     squareThickenSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
@@ -102,14 +58,6 @@ SimpleSynthAudioProcessorEditor::SimpleSynthAudioProcessorEditor (SimpleSynthAud
     squareThickenSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
     addAndMakeVisible(&squareThickenSlider);
 
-    sawAttackSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    sawAttackSlider.setRange(0.1f, 4000.0f);
-    sawAttackSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
-    sawAttackSlider.setValue(2000);
-    sawAttackSlider.addListener(this);
-    sawAttackSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
-    addAndMakeVisible(&sawAttackSlider);
-
     sawDecaySlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     sawDecaySlider.setRange(0.1f, 1000.0f);
     sawDecaySlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
@@ -117,30 +65,6 @@ SimpleSynthAudioProcessorEditor::SimpleSynthAudioProcessorEditor (SimpleSynthAud
     sawDecaySlider.addListener(this);
     sawDecaySlider.setPopupDisplayEnabled(true, true, nullptr, -1);
     addAndMakeVisible(&sawDecaySlider);
-
-    sawSustainSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    sawSustainSlider.setRange(0.1f, 1.0f);
-    sawSustainSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
-    sawSustainSlider.setValue(0.5f);
-    sawSustainSlider.addListener(this);
-    sawSustainSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
-    addAndMakeVisible(&sawSustainSlider);
-
-    sawReleaseSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    sawReleaseSlider.setRange(0.1f, 4000.0f);
-    sawReleaseSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
-    sawReleaseSlider.setValue(2000.0f);
-    sawReleaseSlider.addListener(this);
-    sawReleaseSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
-    addAndMakeVisible(&sawReleaseSlider);
-
-    sawLevelSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    sawLevelSlider.setRange(0.0f, 1.0f);
-    sawLevelSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
-    sawLevelSlider.setValue(0.0f);
-    sawLevelSlider.addListener(this);
-    sawLevelSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
-    addAndMakeVisible(&sawLevelSlider);
 
     sawThickenSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     sawThickenSlider.setRange(0.0f, 1.0f);
@@ -159,13 +83,53 @@ SimpleSynthAudioProcessorEditor::SimpleSynthAudioProcessorEditor (SimpleSynthAud
     addAndMakeVisible(&releaseSpeedSlider);
 
     releaseDepthSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
-    releaseDepthSlider.setRange(0.1f, 10000.0f);
+    releaseDepthSlider.setRange(0, 8000);
     releaseDepthSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
-    releaseDepthSlider.setValue(2000.0f);
+    releaseDepthSlider.setValue(2000);
     releaseDepthSlider.addListener(this);
     releaseDepthSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
     addAndMakeVisible(&releaseDepthSlider);
     
+    globalCutoffSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    globalCutoffSlider.setRange(40,8000);
+    globalCutoffSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
+    globalCutoffSlider.setValue(7000);
+    globalCutoffSlider.addListener(this);
+    globalCutoffSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
+    addAndMakeVisible(&globalCutoffSlider);
+
+    globalResonanceSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    globalResonanceSlider.setRange(0.0f, 10.0f);
+    globalResonanceSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
+    globalResonanceSlider.setValue(0.0f);
+    globalResonanceSlider.addListener(this);
+    globalResonanceSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
+    addAndMakeVisible(&globalResonanceSlider);
+
+    gateDepthSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    gateDepthSlider.setRange(0.0f, 1.0f);
+    gateDepthSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
+    gateDepthSlider.setValue(0.0f);
+    gateDepthSlider.addListener(this);
+    gateDepthSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
+    addAndMakeVisible(&gateDepthSlider);
+
+    gateSpeedSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    gateSpeedSlider.setRange(0.0f, 10.0f);
+    gateSpeedSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
+    gateSpeedSlider.setValue(4.0f);
+    gateSpeedSlider.addListener(this);
+    gateSpeedSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
+    addAndMakeVisible(&gateSpeedSlider);
+
+    volumeSlider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    volumeSlider.setRange(0.0f, 1.0f);
+    volumeSlider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
+    volumeSlider.setValue(0.5f);
+    volumeSlider.addListener(this);
+    volumeSlider.setPopupDisplayEnabled(true, true, nullptr, -1);
+    addAndMakeVisible(&volumeSlider);
+
     sliderTreeTriangleLevel = std::make_unique< AudioProcessorValueTreeState::SliderAttachment>(processor.tree, "triangleLevel", triangleLevelSlider);
     sliderTreeTriangleThicken = std::make_unique< AudioProcessorValueTreeState::SliderAttachment>(processor.tree, "triangleThicken", triangleThickenSlider);
     sliderTreeTriangleAttack = std::make_unique< AudioProcessorValueTreeState::SliderAttachment>(processor.tree, "triangleAttack", triangleAttackSlider);
@@ -187,8 +151,20 @@ SimpleSynthAudioProcessorEditor::SimpleSynthAudioProcessorEditor (SimpleSynthAud
     sliderTreeSawSustain = std::make_unique< AudioProcessorValueTreeState::SliderAttachment>(processor.tree, "sawSustain", sawSustainSlider);
     sliderTreeSawRelease = std::make_unique< AudioProcessorValueTreeState::SliderAttachment>(processor.tree, "sawRelease", sawReleaseSlider);
 
+    sliderTreeTrianglePan = std::make_unique< AudioProcessorValueTreeState::SliderAttachment>(processor.tree, "trianglePan", trianglePanSlider);
+    sliderTreeSquarePan = std::make_unique< AudioProcessorValueTreeState::SliderAttachment>(processor.tree, "squarePan", squarePanSlider);
+    sliderTreeSawPan = std::make_unique< AudioProcessorValueTreeState::SliderAttachment>(processor.tree, "sawPan", sawPanSlider);
+
     sliderTreeReleaseSpeed = std::make_unique< AudioProcessorValueTreeState::SliderAttachment>(processor.tree, "releaseSpeed", releaseSpeedSlider);
     sliderTreeReleaseDepth = std::make_unique< AudioProcessorValueTreeState::SliderAttachment>(processor.tree, "releaseDepth", releaseDepthSlider);
+
+    sliderTreeGlobalCutoff = std::make_unique< AudioProcessorValueTreeState::SliderAttachment>(processor.tree, "globalCutoff", globalCutoffSlider);
+    sliderTreeGlobalResonance = std::make_unique< AudioProcessorValueTreeState::SliderAttachment>(processor.tree, "globalResonance", globalResonanceSlider);
+
+    sliderTreeGateDepth = std::make_unique< AudioProcessorValueTreeState::SliderAttachment>(processor.tree, "gateDepth", gateDepthSlider);
+    sliderTreeGateSpeed = std::make_unique< AudioProcessorValueTreeState::SliderAttachment>(processor.tree, "gateSpeed", gateSpeedSlider);
+
+    sliderTreeVolume = std::make_unique< AudioProcessorValueTreeState::SliderAttachment>(processor.tree, "volume", volumeSlider);
 }
 
 SimpleSynthAudioProcessorEditor::~SimpleSynthAudioProcessorEditor()
@@ -198,27 +174,39 @@ SimpleSynthAudioProcessorEditor::~SimpleSynthAudioProcessorEditor()
 //==============================================================================
 void SimpleSynthAudioProcessorEditor::paint (Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (Colours::black);
 
     g.setColour(Colours::whitesmoke);
-    g.fillRoundedRectangle(10, 50, 245, 270, 1.5);
-    g.fillRoundedRectangle(265, 50, 330, 270, 1.5);
-    g.fillRoundedRectangle(10, 330, 245, 140, 1.5);
-
+    g.fillRoundedRectangle(10, 50, 249, 274, 1.5);
+    g.fillRoundedRectangle(263, 50, 330, 274, 1.5);
+    g.fillRoundedRectangle(10, 328, 249, 140, 1.5);
+    g.fillRoundedRectangle(263, 328, 165, 140, 1.5);
+    g.fillRoundedRectangle(432, 328, 161, 140, 1.5);
+    g.fillRoundedRectangle(597, 50, 85, 274, 1.5);
+    g.fillRoundedRectangle(597, 328, 85, 140, 1.5);
 
     g.setColour (Colours::whitesmoke);
     g.setFont (15.0f);
     g.setFont(Font("Times New Roman", 20.0f, Font::italic));
-    g.drawText("Mine Is Yours", 500, 5, 200, 40, Justification::centred, true);
+    g.drawText("Mine Is Yours", 450, 5, 200, 40, Justification::centred, true);
+    g.drawLine(10, 25, 480, 25,1);
+    g.drawLine(615, 25, 682, 25, 1);
 
     g.setColour(Colours::black);
-    g.setFont(Font("Arial", 16.0f, Font::bold));
+    g.setFont(Font("Arial", 12.0f, Font::bold));
     g.drawText("LEVEL", 85, 60, 80, 20, Justification::centred, true);
     g.drawText("THICKEN", 165, 60, 80, 20, Justification::centred, true);
     g.drawText("DEPTH", 85, 440, 80, 20, Justification::centred, true);
-    g.drawText("SPEED", 165, 440, 80, 20, Justification::centred, true);
-    g.drawText("RELEASE FILTER SWEEP", 10, 340, 200, 20, Justification::centred, true);
+    g.drawText("ATTACK", 165, 440, 80, 20, Justification::centred, true);
+    g.drawText("CUT OFF", 270, 440, 80, 20, Justification::centred, true);
+    g.drawText("RES", 350, 440, 80, 20, Justification::centred, true);
+    g.drawText("DEPTH", 430, 440, 80, 20, Justification::centred, true);
+    g.drawText("RATE", 510, 440, 80, 20, Justification::centred, true);
+    g.drawText("VOLUME", 600, 340, 80, 20, Justification::centred, true);
+
+    g.drawText("RELEASE FILTER SWEEP", 10, 340, 180, 20, Justification::centred, true);
+    g.drawText("GLOBAL LOW PASS", 275, 340, 130, 20, Justification::centred, true);
+    g.drawText("GATE", 405, 340, 130, 20, Justification::centred, true);
 
     g.setColour(Colours::darkgrey);
     g.drawText("(SUPER)", 165, 230, 80, 20, Justification::centred, true);
@@ -228,11 +216,26 @@ void SimpleSynthAudioProcessorEditor::paint (Graphics& g)
     g.drawText("D", 380, 60, 20, 20, Justification::centred, true);
     g.drawText("S", 460, 60, 20, 20, Justification::centred, true);
     g.drawText("R", 540, 60, 20, 20, Justification::centred, true);
+    g.drawText("PAN", 620, 60, 40, 20, Justification::centred, true);
+
+    g.setColour(Colours::indianred);
 
     g.drawLine(20, 120, 40, 100, 3);
     g.drawLine(40, 100, 60, 120, 3);
     g.drawLine(60, 120, 80, 100, 3);
 
+    g.drawLine(20, 200, 20, 180, 3);
+    g.drawLine(20, 180, 40, 180, 3);
+    g.drawLine(40, 200, 40, 180, 3);
+    g.drawLine(40, 200, 60, 200, 3);
+    g.drawLine(60, 180, 60, 200, 3);
+    g.drawLine(60, 180, 80, 180, 3);
+
+    g.drawLine(20, 280, 40, 260, 3);
+    g.drawLine(40, 260, 40, 280, 3);
+    g.drawLine(40, 280, 60, 260, 3);
+    g.drawLine(60, 260, 60, 280, 3);
+    g.drawLine(60, 280, 80, 260, 3);
 }
 
 void SimpleSynthAudioProcessorEditor::resized()
@@ -258,11 +261,65 @@ void SimpleSynthAudioProcessorEditor::resized()
     sawSustainSlider.setBounds(435, 240, 70, 70);
     sawReleaseSlider.setBounds(515, 240, 70, 70);
 
+    trianglePanSlider.setBounds(605, 80, 70, 70);
+    squarePanSlider.setBounds(605, 160, 70, 70);
+    sawPanSlider.setBounds(605, 240, 70, 70);
+
+
     releaseDepthSlider.setBounds(90, 370, 70, 70);
     releaseSpeedSlider.setBounds(170, 370, 70, 70);
+
+    globalCutoffSlider.setBounds(275, 370, 70, 70);
+    globalResonanceSlider.setBounds(355, 370, 70, 70);
+
+    gateDepthSlider.setBounds(435, 370, 70, 70);
+    gateSpeedSlider.setBounds(515, 370, 70, 70);
+
+    volumeSlider.setBounds(605, 370, 70, 70);
+}
+
+void  SimpleSynthAudioProcessorEditor::initialiseLevelSliders(Slider& slider) {
+
+    slider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    slider.setRange(0.0f, 1.0f);
+    slider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
+    slider.addListener(this);
+    slider.setPopupDisplayEnabled(true, true, nullptr, -1);
+    addAndMakeVisible(&slider);
+}    
+
+void  SimpleSynthAudioProcessorEditor::initialiseAttackOrReleaseSlider(Slider& slider) {
+
+    slider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    slider.setRange(0.1f, 4000.0f);
+    slider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
+    slider.setValue(2000);
+    slider.addListener(this);
+    slider.setPopupDisplayEnabled(true, true, nullptr, -1);
+    addAndMakeVisible(&slider);
+}
+
+void  SimpleSynthAudioProcessorEditor::initialiseSustainSlider(Slider& slider) {
+    slider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    slider.setRange(0.1f, 1.0f);
+    slider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
+    slider.setValue(0.5f);
+    slider.addListener(this);
+    slider.setPopupDisplayEnabled(true, true, nullptr, -1);
+    addAndMakeVisible(&slider);
+}
+
+void  SimpleSynthAudioProcessorEditor::initialisePanSlider(Slider& slider) {
+    slider.setSliderStyle(Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    slider.setRange(-0.5f, 0.5f);
+    slider.setTextBoxStyle(Slider::NoTextBox, false, 100, 20);
+    slider.setValue(0.0f);
+    slider.addListener(this);
+    slider.setPopupDisplayEnabled(true, true, nullptr, -1);
+    addAndMakeVisible(&slider);
 }
 
 void SimpleSynthAudioProcessorEditor::sliderValueChanged(Slider* slider)
 {
- 
+
 }

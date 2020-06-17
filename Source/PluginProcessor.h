@@ -46,20 +46,6 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    float triangleLevel;
-    float triangleThicken;
-    float triangleAttackTime;
-    float triangleDecayTime;
-    float triangleSustainTime;
-    float triagleReleaseTime;
-
-    float squareLevel;
-    float squareThicken;
-    float squareAttackTime;
-    float squareDecayTime;
-    float squareSustainTime;
-    float squareReleaseTime;
-
     AudioProcessorValueTreeState tree;
 
 private:

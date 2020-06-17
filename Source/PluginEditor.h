@@ -6,8 +6,8 @@
 //==============================================================================
 /**
 */
-class SimpleSynthAudioProcessorEditor  : public AudioProcessorEditor,
-    public Slider::Listener
+class SimpleSynthAudioProcessorEditor : public AudioProcessorEditor,
+                                        public Slider::Listener
 {
 public:
     SimpleSynthAudioProcessorEditor (SimpleSynthAudioProcessor&);
@@ -16,12 +16,16 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
+    void sliderValueChanged(Slider* ) override;
 
-    void sliderValueChanged(Slider* slider) override;
+    void initialiseLevelSliders(Slider&);
+    void initialiseAttackOrReleaseSlider(Slider&);
+    void initialiseSustainSlider(Slider&);
+
+    void initialisePanSlider(Slider&);
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
+
     SimpleSynthAudioProcessor& processor;
 
     Slider triangleLevelSlider;
@@ -48,6 +52,18 @@ private:
     Slider releaseSpeedSlider;
     Slider releaseDepthSlider;
 
+    Slider globalCutoffSlider;
+    Slider globalResonanceSlider;
+
+    Slider gateDepthSlider;
+    Slider gateSpeedSlider;
+
+    Slider trianglePanSlider;
+    Slider squarePanSlider;
+    Slider sawPanSlider;
+
+    Slider volumeSlider;
+
 public:
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> sliderTreeTriangleLevel;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> sliderTreeTriangleThicken;
@@ -70,9 +86,20 @@ public:
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> sliderTreeSawSustain;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> sliderTreeSawRelease;
 
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> sliderTreeTrianglePan;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> sliderTreeSquarePan;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> sliderTreeSawPan;
+
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> sliderTreeReleaseDepth;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> sliderTreeReleaseSpeed;
 
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> sliderTreeGlobalCutoff;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> sliderTreeGlobalResonance;
+
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> sliderTreeGateDepth;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> sliderTreeGateSpeed;
+
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> sliderTreeVolume;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleSynthAudioProcessorEditor)
 };
